@@ -1,56 +1,72 @@
-version: '3'
+version: '3.7'
 services:
-  # Node.js backend service
-  backend:
-    build: ./backend
-    ports:
-      - "5000:5000"
-
   # React frontend service
   frontend:
     build: ./frontend
     ports:
       - "80:80"
-
-  # Python service with parameterized entrypoint
-  python:
-    build:
-      context: ./python
-      args:
-        - PYTHON_FILE=your_script.py
-    environment:
-      - PYTHON_FILE=your_script.py
+    depends_on:
+      - backend
+    networks:
+      - crdb-network
+      
+  # Node.js backend service
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - haproxy
+    networks:
+      - crdb-network
 
   # CockroachDB nodes
   crdb1:
-    image: cockroachdb/cockroach:latest
-    command: start --insecure --join=crdb1,crdb2,crdb3
+    image: cockroachdb/cockroach:v23.1.2
+    command: start --insecure --join=crdb1,crdb2,crdb3 --advertise-addr=crdb1
     hostname: crdb1
     volumes:
       - crdb1-data:/cockroach/cockroach-data
     ports:
       - "26257:26257"
       - "8080:8080"
+    networks:
+      - crdb-network
 
   crdb2:
     image: cockroachdb/cockroach:v23.1.2
-    command: start --insecure --join=crdb1,crdb2,crdb3
+    command: start --insecure --join=crdb1,crdb2,crdb3 --advertise-addr=crdb2
     hostname: crdb2
     volumes:
       - crdb2-data:/cockroach/cockroach-data
     ports:
       - "26258:26257"
       - "8081:8080"
+    networks:
+      - crdb-network
 
   crdb3:
     image: cockroachdb/cockroach:v23.1.2
-    command: start --insecure --join=crdb1,crdb2,crdb3
+    command: start --insecure --join=crdb1,crdb2,crdb3 --advertise-addr=crdb3
     hostname: crdb3
     volumes:
       - crdb3-data:/cockroach/cockroach-data
     ports:
       - "26259:26257"
       - "8082:8080"
+    networks:
+      - crdb-network
+
+  # CockroachDB initialization service
+  crdb-init:
+    image: cockroachdb/cockroach:v23.1.2
+    command: ["sh", "-c", "sleep 10 && cockroach init --insecure"]
+    depends_on:
+      - crdb1
+      - crdb2
+      - crdb3
+    networks:
+      - crdb-network
 
   # HAProxy load balancer for CockroachDB
   haproxy:
@@ -63,6 +79,12 @@ services:
       - "26256:26256"
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    networks:
+      - crdb-network
+
+networks:
+  crdb-network:
+    driver: bridge
 
 volumes:
   crdb1-data:

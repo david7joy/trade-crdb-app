@@ -12,7 +12,7 @@ app.use(express.json());
 
 // CockroachDB connection pool
 const pool = new Pool({
-  connectionString: 'postgres://root@localhost:26257/trade_db?sslmode=disable&application_name=birdtrade',
+  connectionString: 'postgres://root@haproxy:26256/trade_db?sslmode=disable&application_name=birdtrade',
   ssl: {
     rejectUnauthorized: false,
   },
