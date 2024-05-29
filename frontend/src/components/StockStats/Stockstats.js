@@ -1,50 +1,50 @@
 import React from 'react';
 import './stockstats.css';
 
-function StockStats() {
+function StockStats({details}) {
   return (
     <div class="statistics-container">
         <div class="statistics-title">Key statistics</div>
             <div class="statistics-grid">
                 <div class="stat-item">
                     <strong>Market cap</strong>
-                    <span>544.31M</span>
+                    <span>{details.market_cap}</span>
                 </div>
                 <div class="stat-item">
                     <strong>Price-Earnings ratio</strong>
-                    <span>-2.92</span>
+                    <span>{details.pe_ratio}</span>
                 </div>
                 <div class="stat-item">
                     <strong>Dividend yield</strong>
-                    <span>—</span>
+                    <span>{details.dividend_yield}</span>
                 </div>
                 <div class="stat-item">
                     <strong>Average volume</strong>
-                    <span>1.29M</span>
+                    <span>{details.average_volume}</span>
                 </div>
                 <div class="stat-item">
                     <strong>High today</strong>
-                    <span>$2.64</span>
+                    <span>{details.high_today}</span>
                 </div>
                 <div class="stat-item">
                     <strong>Low today</strong>
-                    <span>$2.55</span>
+                    <span>{details.low_today}</span>
                 </div>
                 <div class="stat-item">
                     <strong>Open price</strong>
-                    <span>$2.55</span>
+                    <span>{details.open_price}</span>
                 </div>
                 <div class="stat-item">
                     <strong>Volume</strong>
-                    <span>500.11K</span>
+                    <span>{details.volume}</span>
                 </div>
                 <div class="stat-item">
                     <strong>52 Week high</strong>
-                    <span>$3.35</span>
+                    <span>{details.high_52_week}</span>
                 </div>
                 <div class="stat-item">
                     <strong>52 Week low</strong>
-                    <span>$2.06</span>
+                    <span>{details.low_52_week}</span>
                 </div>
             </div>
         </div>

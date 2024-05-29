@@ -25,7 +25,8 @@ CREATE TABLE instruments (
     symbol STRING PRIMARY KEY UNIQUE NOT NULL,
     name STRING NOT NULL,
     current_price DECIMAL(20, 2) NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT now()
+    created_at TIMESTAMPTZ DEFAULT now(),
+    details JSONB
 );
 
 CREATE TABLE orders (

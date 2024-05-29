@@ -43,7 +43,7 @@ class Tradeorder:
             self.order_nbr = ''.join(random.choices(string.ascii_uppercase + string.digits, k=14)) # 10-character order number
             self.order_entry_ts = dt.datetime.now()
             self.total_qty = random.randint(1, 100)  # Random quantity between 1 and 100
-            self.order_type = random.choice(["BUY", "SELL"])  # Randomly choose between BUY and SELL
+            self.order_type = random.choice(["buy", "sell"])  # Randomly choose between BUY and SELL
 
             # insert into orders
             stmt = """
