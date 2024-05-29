@@ -1,0 +1,18 @@
+version: '3'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+  python:
+    build:
+      context: ./python
+      args:
+        - PYTHON_FILE=your_script.py
+    environment:
+      - PYTHON_FILE=your_script.py
+
